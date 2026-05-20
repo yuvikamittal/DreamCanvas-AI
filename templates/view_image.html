@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ img.prompt[:50] }} — DreamCanvas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#07090f;--surface:#0e1117;--border:rgba(255,255,255,0.07);--accent:#5b6ef5;--text:#e8eaf0;--muted:#6b7280}
+    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;max-width:560px;width:100%}
+    img{width:100%;display:block}
+    .body{padding:24px}
+    .prompt{font-size:15px;line-height:1.6;margin-bottom:8px;font-style:italic;color:var(--muted)}
+    .meta{font-size:12px;color:var(--muted);margin-bottom:20px}
+    .actions{display:flex;gap:10px}
+    .btn{flex:1;padding:11px;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;text-align:center;text-decoration:none;border:none}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-secondary{background:transparent;border:1px solid var(--border);color:var(--muted)}
+    .btn-secondary:hover{color:var(--text);border-color:rgba(255,255,255,0.15)}
+    #copy-btn{cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="{{ url_for('static', filename='images/' + img.filename) }}" alt="{{ img.prompt }}"/>
+    <div class="body">
+      <p class="prompt">"{{ img.prompt }}"</p>
+      <p class="meta">{{ img.created_at.strftime('%d %B %Y') }} · {{ img.user.username }} dwara</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="{{ url_for('static', filename='images/' + img.filename) }}" download>Download</a>
+        <button class="btn btn-secondary" id="copy-btn" onclick="copyLink()">Copy the link</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy the link', 2000);
+      });
+    }
+  </script>
+</body>
+</html>
